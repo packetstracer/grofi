@@ -1,22 +1,17 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
-// material-ui
 import { Box, Grid, CardContent, LinearProgress, Rating, Stack, Typography } from '@mui/material';
 
-// project imports
 import MainCard from 'ui-component/cards/MainCard';
 import ProductReview from 'ui-component/cards/ProductReview';
 import { gridSpacing } from 'store/constant';
 import { useDispatch, useSelector } from 'store';
 import { getProductReviews } from 'store/slices/product';
 
-// assets
 import StarTwoToneIcon from '@mui/icons-material/StarTwoTone';
 import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
-// import RateReviewTwoToneIcon from '@mui/icons-material/RateReviewTwoTone';
 
-// progress
 function LinearProgressWithLabel({ like, star, color, value, ...others }) {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -39,8 +34,6 @@ LinearProgressWithLabel.propTypes = {
     color: PropTypes.string,
     value: PropTypes.number
 };
-
-// ==============================|| PRODUCT DETAILS - REVIEWS ||============================== //
 
 const ProductReviews = ({ product }) => {
     const dispatch = useDispatch();
@@ -106,17 +99,7 @@ const ProductReviews = ({ product }) => {
                     </CardContent>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-                {/* <MainCard content={false} sx={{ height: '100%' }}>
-                    <CardContent sx={{ height: '100%' }}>
-                        <Stack alignItems="center" justifyContent="center" spacing={2} sx={{ height: '100%' }}>
-                            <Button variant="outlined" size="large" startIcon={<RateReviewTwoToneIcon fontSize="inherit" />}>
-                                Write an Review
-                            </Button>
-                        </Stack>
-                    </CardContent>
-                </MainCard> */}
-            </Grid>
+            <Grid item xs={12} md={6} lg={4}></Grid>
 
             {reviews &&
                 reviews.map((review, index) => (
@@ -131,11 +114,6 @@ const ProductReviews = ({ product }) => {
                         />
                     </Grid>
                 ))}
-            {/* <Grid item xs={12}>
-                <Stack direction="row" justifyContent="center">
-                    <Button variant="text"> Load more Comments </Button>
-                </Stack>
-            </Grid> */}
         </Grid>
     );
 };

@@ -49,13 +49,6 @@ const generalMenu = {
             url: '/market',
             icon: icons.IconBasket
         }
-        // {
-        //     id: 'sample',
-        //     title: <FormattedMessage id="sample-page" />,
-        //     type: 'item',
-        //     url: '/sample-page',
-        //     icon: icons.IconBrandChrome
-        // }
     ]
 };
 

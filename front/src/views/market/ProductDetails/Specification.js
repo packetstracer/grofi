@@ -1,4 +1,3 @@
-// material-ui
 import { Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 
 function createData(key, value) {
@@ -24,8 +23,6 @@ const rowsGeneral = [
     createData('Reversible', 'No'),
     createData('Secondary Color', 'Black, Brown')
 ];
-
-// ==============================|| PRODUCT DETAILS - SPECIFICATION ||============================== //
 
 const Specification = () => (
     <Grid container spacing={2}>

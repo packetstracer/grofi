@@ -1,19 +1,14 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Box, useMediaQuery } from '@mui/material';
 
-// third-party
 import Slider from 'react-slick';
 
-// project imports
 import ProductCard from 'ui-component/cards/ProductCard';
 import { useDispatch, useSelector } from 'store';
 import { getRelatedProducts } from 'store/slices/product';
-
-// ==============================|| PRODUCT DETAILS - RELATED PRODUCTS ||============================== //
 
 const RelatedProducts = ({ id }) => {
     const theme = useTheme();

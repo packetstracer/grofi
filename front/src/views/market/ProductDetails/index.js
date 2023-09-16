@@ -2,20 +2,14 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-// material-ui
 import { Box, Grid } from '@mui/material';
 
-// project imports
 import ProductImages from './ProductImages';
 import ProductInfo from './ProductInfo';
-// import ProductDescription from './ProductDescription';
-// import ProductReview from './ProductReview';
 import RelatedProducts from './RelatedProducts';
 
 import Loader from 'ui-component/Loader';
 import MainCard from 'ui-component/cards/MainCard';
-// import Chip from 'ui-component/extended/Chip';
-// import FloatingCart from 'ui-component/cards/FloatingCart';
 
 import { useDispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';
@@ -42,13 +36,6 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired
 };
 
-// function a11yProps(index) {
-//     return {
-//         id: `product-details-tab-${index}`,
-//         'aria-controls': `product-details-tabpanel-${index}`
-//     };
-// }
-
 const ProductDetails = () => {
     const { id } = useParams();
 
@@ -58,15 +45,7 @@ const ProductDetails = () => {
 
     const [loading, setLoading] = useState(true);
 
-    // product description tabs
-    // const [value, setValue] = useState(0);
-
-    // const handleChange = (event, newValue) => {
-    //     setValue(newValue);
-    // };
-
     useEffect(() => {
-        // getProduct();
         dispatch(getProduct(id)).then(() => setLoading(false));
 
         // clear cart if complete order
@@ -95,45 +74,14 @@ const ProductDetails = () => {
                             <Grid item xs={12} md={6}>
                                 <ProductInfo product={product} />
                             </Grid>
-                            {/* <Grid item xs={12}>
-                                <Tabs
-                                    value={value}
-                                    indicatorColor="primary"
-                                    onChange={handleChange}
-                                    sx={{}}
-                                    aria-label="product description tabs example"
-                                    variant="scrollable"
-                                >
-                                    <Tab component={Link} to="#" label="Description" {...a11yProps(0)} />
-                                    <Tab
-                                        component={Link}
-                                        to="#"
-                                        label={
-                                            <Stack direction="row" alignItems="center">
-                                                Reviews <Chip label={3} size="small" chipcolor="secondary" sx={{ ml: 1.5 }} />
-                                            </Stack>
-                                        }
-                                        {...a11yProps(1)}
-                                    />
-                                </Tabs>
-                                <TabPanel value={value} index={0}>
-                                    <ProductDescription />
-                                </TabPanel>
-                                <TabPanel value={value} index={1}>
-                                    <ProductReview product={product} />
-                                </TabPanel>
-                            </Grid> */}
                         </Grid>
                     )}
                 </MainCard>
             </Grid>
-            {/* <Grid item xs={12} lg={10} sx={{ mt: 3 }}>
-                <Typography variant="h2">NFTs your may like</Typography>
-            </Grid> */}
+
             <Grid item xs={11} lg={10}>
                 <RelatedProducts id={id} />
             </Grid>
-            {/* <FloatingCart /> */}
         </Grid>
     );
 };

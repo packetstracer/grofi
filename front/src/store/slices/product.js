@@ -72,19 +72,6 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-// ----------------------------------------------------------------------
-
-// export function getProducts() {
-//     return async () => {
-//         try {
-//             const response = await axios.get('/api/products/list');
-//             dispatch(slice.actions.getProductsSuccess(response.data.products));
-//         } catch (error) {
-//             dispatch(slice.actions.hasError(error));
-//         }
-//     };
-// }
-
 export function getProducts() {
     return async () => {
         try {
@@ -99,9 +86,6 @@ export function filterProducts() {
     // export function filterProducts(filter) {
     return async () => {
         try {
-            // const response = await axios.post('/api/products/filter', { filter });
-            // dispatch(slice.actions.filterProductsSuccess(response.data));
-
             dispatch(slice.actions.filterProductsSuccess(products));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
@@ -112,9 +96,6 @@ export function filterProducts() {
 export function getProduct(id) {
     return async () => {
         try {
-            // const response = await axios.post('/api/product/details', { id });
-            // dispatch(slice.actions.getProductSuccess(response.data));
-
             dispatch(slice.actions.getProductSuccess(getProductMockById(id)));
         } catch (error) {
             dispatch(slice.actions.hasError(error));
@@ -125,10 +106,6 @@ export function getProduct(id) {
 export function getRelatedProducts(id) {
     return async () => {
         try {
-            // const response = await axios.post('/api/product/related', { id });
-            // dispatch(slice.actions.getRelatedProductsSuccess(response.data));
-
-            // HACK log id to avoid warnings (involves too many changes :P)
             console.log(id);
             dispatch(slice.actions.getRelatedProductsSuccess(products));
         } catch (error) {
