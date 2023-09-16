@@ -10,11 +10,9 @@ import {
     TimelineOppositeContent
 } from '@mui/lab';
 
-// import FastfoodIcon from '@mui/icons-material/FastfoodTwoTone';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LaptopMacIcon from '@mui/icons-material/LaptopMacTwoTone';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
-// import HotelIcon from '@mui/icons-material/HotelTwoTone';
 import RepeatIcon from '@mui/icons-material/RepeatTwoTone';
 
 export default function CustomizedTimeline() {
@@ -45,7 +43,6 @@ export default function CustomizedTimeline() {
                         <Typography variant="h5" component="h1">
                             Registration
                         </Typography>
-                        {/* <Typography>KYC / KYB</Typography> */}
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
@@ -66,7 +63,6 @@ export default function CustomizedTimeline() {
                         <Typography variant="h5" component="h1">
                             Funding starts
                         </Typography>
-                        {/* <Typography>Because it&apos;s awesome!</Typography> */}
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
@@ -87,7 +83,6 @@ export default function CustomizedTimeline() {
                         <Typography variant="h5" component="h1">
                             Funding ends
                         </Typography>
-                        {/* <Typography>Because you need rest</Typography> */}
                     </Paper>
                 </TimelineContent>
             </TimelineItem>

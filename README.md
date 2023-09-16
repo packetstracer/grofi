@@ -1,4 +1,3 @@
-# grofi
-GroFi - Sui LSD for ecosystem growth
+# berry-material-react
 
-WORK IN PROGRESS - uploading code soon!!
+Temp for release...

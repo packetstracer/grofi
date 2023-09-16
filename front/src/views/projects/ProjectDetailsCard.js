@@ -9,8 +9,6 @@ import Avatar from '../../ui-component/extended/Avatar';
 import AlertDialogSlide from './AlertDialogSlide';
 
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-// import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-// import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 
 import LanguageIcon from '@mui/icons-material/Language';
 import TelegramIcon from '@mui/icons-material/Telegram';
@@ -185,21 +183,10 @@ const ProjectDetailsCard = ({ id, about, avatar, contact, email, location, name,
 
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="success"
-                                // startIcon={<AttachMoneyIcon />}
-                                onClick={handleOpenDialog}
-                            >
+                            <Button fullWidth variant="contained" color="success" onClick={handleOpenDialog}>
                                 Invest
                             </Button>
                         </Grid>
-                        {/* <Grid item xs={6}>
-                            <Button variant="outlined" color="error" fullWidth startIcon={<MoneyOffIcon />} onClick={handleOpenDialog}>
-                                Unstake
-                            </Button>
-                        </Grid> */}
                     </Grid>
                 </Grid>
 

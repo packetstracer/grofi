@@ -1,22 +1,10 @@
 import { Grid } from '@mui/material';
 
 import MainCard from 'ui-component/cards/MainCard';
-// import SubCard from 'ui-component/cards/SubCard';
 
 import ProjectDetailsCard from 'views/projects/ProjectDetailsCard';
 
 import { gridSpacing } from 'store/constant';
-
-// const userDetails = {
-//     id: '#1Card_Phoebe',
-//     avatar: 'avatar-2.png',
-//     name: 'Blockscope.net',
-//     role: 'Liquid Staking Circular Economy on Sui Network',
-//     about: 'Blockscope is Web3 software studio that aims to deliver top notch DeFi and LSDfi applications.',
-//     email: 'https://blockscope.net',
-//     contact: 'Exclusive NFTs',
-//     location: 'LSDfi'
-// };
 
 const usersDetails = [
     {
@@ -93,13 +81,7 @@ const usersDetails = [
 
 const ProjectsPage = () => (
     <MainCard>
-        {/* <MainCard title="Projects Portfolio"> */}
-        {/* <Typography variant="body2">Our selection of the finest projects from the SUI ecosystem.</Typography> */}
-
         <Grid container spacing={gridSpacing} sx={{ mb: 1 }}>
-            {/* <Grid item xs={12} lg={4}>
-                <ProjectDetailsCard {...userDetails} />
-            </Grid> */}
             {usersDetails &&
                 usersDetails.map((user) => (
                     <Grid item xs={12} lg={4} key={user.id}>

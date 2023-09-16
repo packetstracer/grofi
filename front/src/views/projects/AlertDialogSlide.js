@@ -244,9 +244,6 @@ export default function AlertDialogSlide({ open, handleClose, title, description
                             >
                                 Close
                             </Button>
-                            {/* <Button variant="contained" size="small" onClick={handleClose} color="success">
-                                Stake
-                            </Button> */}
                         </DialogActions>
                     </>
                 )}

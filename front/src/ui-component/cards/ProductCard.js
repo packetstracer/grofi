@@ -2,22 +2,17 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// material-ui
 import { Button, CardContent, CardMedia, Grid, Rating, Stack, Typography } from '@mui/material';
 
-// project import
 import MainCard from './MainCard';
 import SkeletonProductPlaceholder from 'ui-component/cards/Skeleton/ProductPlaceholder';
 import { useDispatch, useSelector } from 'store';
 import { addProduct } from 'store/slices/cart';
 import { openSnackbar } from 'store/slices/snackbar';
 
-// assets
 import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 
 const prodImage = require.context('assets/images/e-commerce', true);
-
-// ==============================|| PRODUCT CARD ||============================== //
 
 const ProductCard = ({ id, color, name, image, description, offerPrice, salePrice, rating }) => {
     const dispatch = useDispatch();
@@ -100,11 +95,6 @@ const ProductCard = ({ id, color, name, image, description, offerPrice, salePric
                                         <Grid item>
                                             <Typography variant="h4">${offerPrice}</Typography>
                                         </Grid>
-                                        {/* <Grid item>
-                                            <Typography variant="h6" sx={{ color: 'grey.500', textDecoration: 'line-through' }}>
-                                                ${salePrice}
-                                            </Typography>
-                                        </Grid> */}
                                     </Grid>
                                     <Button variant="contained" sx={{ minWidth: 0 }} onClick={addCart} aria-label="Add to Cart product">
                                         <ShoppingCartTwoToneIcon fontSize="small" />

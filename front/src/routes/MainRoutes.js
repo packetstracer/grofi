@@ -1,12 +1,9 @@
 import { lazy } from 'react';
 
-// project imports
 import AuthGuard from 'utils/route-guard/AuthGuard';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const DashboardPage = Loadable(lazy(() => import('views/dashboard/index')));
 const StakePage = Loadable(lazy(() => import('views/stake')));
 const ProjectsPage = Loadable(lazy(() => import('views/projects')));
@@ -44,10 +41,6 @@ const MainRoutes = {
         {
             path: '/market/nft/:id',
             element: <NftDetailsPage />
-        },
-        {
-            path: '/sample-page',
-            element: <SamplePage />
         }
     ]
 };

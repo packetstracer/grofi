@@ -128,34 +128,6 @@ const ProjectWidgetForm = ({ ...others }) => {
                         )}
                     </FormControl>
 
-                    {/* <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-password-login">oSUI</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password-login"
-                            type={'number'}
-                            value={values.sui}
-                            name="osui"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            inputProps={{}}
-                            label="oSui"
-                            sx={{
-                                '& input[type=number]': {
-                                    '-moz-appearance': 'textfield'
-                                },
-                                '& input[type=number]::-webkit-outer-spin-button': {
-                                    '-webkit-appearance': 'none',
-                                    margin: 0
-                                },
-                                '& input[type=number]::-webkit-inner-spin-button': {
-                                    '-webkit-appearance': 'none',
-                                    margin: 0
-                                }
-                            }}
-                            disabled
-                        />
-                    </FormControl> */}
-
                     {errors.submit && (
                         <Box sx={{ mt: 3 }}>
                             <FormHelperText error>{errors.submit}</FormHelperText>

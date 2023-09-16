@@ -18,7 +18,6 @@ const StakeStatsCard = () => {
     const stake = useSelector((state) => state.stake);
 
     return (
-        // <MainCard title="Stake Stats">
         <MainCard>
             <Grid container justifyContent="center" alignItems="center" spacing={gridSpacing} sx={{ px: 8, py: 3 }}>
                 <Grid item xs={12} lg={4} sm={8}>
