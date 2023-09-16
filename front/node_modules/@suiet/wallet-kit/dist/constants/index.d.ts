@@ -1,0 +1,5 @@
+export * from '../chain/constants';
+export declare enum QueryKey {
+    COIN_BALANCE = "SUIET_COIN_BALANCE"
+}
+export declare function queryKey(key: string, opts: Record<string, any>): string;
