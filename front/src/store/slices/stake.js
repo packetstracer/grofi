@@ -4,6 +4,7 @@ const initialState = {
     staked: 0,
     minted: 0,
     rewards: 0,
+    borrowed: 0,
     grofiList: [],
     stakedList: []
 };
@@ -32,13 +33,21 @@ const stake = createSlice({
 
         addGrofiObject(state, action) {
             state.grofiList = [...state.grofiList, action.payload];
+            state.minted += Number(action.payload?.content?.fields?.balance);
+            state.borrowed += Number(action.payload?.content?.fields?.borrowed);
         },
 
         addStakedObject(state, action) {
             state.stakedList = [...state.stakedList, action.payload];
+            state.staked += Number(action.payload?.content?.fields?.principal);
         }
     }
 });
+
+export const convertBalance = (balance) => {
+    const balanceInSui = Number(balance) / 1000000000;
+    return Math.round(balanceInSui * 100) / 100;
+};
 
 export default stake.reducer;
 

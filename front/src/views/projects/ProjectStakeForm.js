@@ -11,16 +11,12 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 import { useWallet, useAccountBalance } from '@suiet/wallet-kit';
+import { convertMistToSui } from 'utils/sui/lib';
 
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import useScriptRef from 'hooks/useScriptRef';
 
 import { setStake } from 'store/slices/stake';
-
-const convertBalance = (balance) => {
-    const balanceInSui = Number(balance) / 1000000000;
-    return Math.round(balanceInSui * 100) / 100;
-};
 
 const ProjectWidgetForm = ({ ...others }) => {
     const theme = useTheme();
@@ -40,7 +36,7 @@ const ProjectWidgetForm = ({ ...others }) => {
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                sui: Yup.number().positive().min(1, 'Must stake more than 1 SUI').max(convertBalance(balance), 'Not enough SUI balance')
+                sui: Yup.number().positive().min(1, 'Must stake more than 1 SUI').max(convertMistToSui(balance), 'Not enough SUI balance')
             })}
             onReset={(values) => {
                 values.sui = 1;
@@ -94,7 +90,7 @@ const ProjectWidgetForm = ({ ...others }) => {
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values, touched }) => (
                 <form noValidate onSubmit={handleSubmit} {...others}>
-                    <Typography variant="caption">Balance {convertBalance(balance)}</Typography>
+                    <Typography variant="caption">Balance {convertMistToSui(balance)}</Typography>
 
                     <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
                         <InputLabel htmlFor="outlined-adornment-email-login">oSUI</InputLabel>
@@ -109,14 +105,14 @@ const ProjectWidgetForm = ({ ...others }) => {
                             inputProps={{}}
                             sx={{
                                 '& input[type=number]': {
-                                    '-moz-appearance': 'textfield'
+                                    MozAppearance: 'textfield'
                                 },
                                 '& input[type=number]::-webkit-outer-spin-button': {
-                                    '-webkit-appearance': 'none',
+                                    WebkitAppearance: 'none',
                                     margin: 0
                                 },
                                 '& input[type=number]::-webkit-inner-spin-button': {
-                                    '-webkit-appearance': 'none',
+                                    WebkitAppearance: 'none',
                                     margin: 0
                                 }
                             }}

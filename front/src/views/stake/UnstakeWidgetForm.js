@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'store';
 
-import { useTheme } from '@mui/material/styles';
-import { Box, Button, FormControl, FormHelperText, InputLabel, OutlinedInput, Typography } from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, Grid } from '@mui/material';
+import FormControlSelect from 'ui-component/extended/Form/FormControlSelect';
 
 import { enqueueSnackbar } from 'notistack';
 
@@ -17,8 +17,19 @@ import useScriptRef from 'hooks/useScriptRef';
 
 import { setStake, convertBalance } from 'store/slices/stake';
 
-import { getBiggestGasObject, getObjectsCreatedFromTxResult, stakeSui, stakeOsui } from 'utils/sui/lib';
+import {
+    getBiggestGasObject,
+    getObjectsCreatedFromTxResult,
+    getOsuiObjects,
+    stakeSui,
+    stakeOsui,
+    convertMistToSui,
+    obfuscateUid
+} from 'utils/sui/lib';
 import { MIST_PER_SUI } from '@mysten/sui.js/utils';
+
+const orderByBalance = (a, b) =>
+    a.content?.fields?.balance < b.content?.fields?.balance ? 1 : b.content?.fields?.balance < a.content?.fields?.balance ? -1 : 0;
 
 const displaySnackbar = (msg, level) => {
     enqueueSnackbar(msg, {
@@ -30,15 +41,35 @@ const displaySnackbar = (msg, level) => {
     });
 };
 
-const StakeWidgetForm = ({ ...others }) => {
-    const theme = useTheme();
+const UnstakeWidgetForm = ({ ...others }) => {
     const dispatch = useDispatch();
     const { rewards } = useSelector((state) => state.stake);
+    const [osuiObjects, setOsuiObjects] = useState([]);
 
     const scriptedRef = useScriptRef();
 
     const wallet = useWallet();
     const { balance } = useAccountBalance();
+
+    useEffect(() => {
+        if (!wallet.address || !wallet.address === '') {
+            return;
+        }
+
+        const getWalletOsuiObjects = async () => {
+            const osuiObjects = await getOsuiObjects(wallet);
+            console.log('osuiObjects ordered', osuiObjects.sort(orderByBalance));
+            console.log('osuiObjects', orderByBalance);
+            setOsuiObjects(
+                osuiObjects.sort(orderByBalance).map((osui, i) => ({
+                    value: i,
+                    label: `${convertMistToSui(osui.content?.fields?.balance)} SUI - Id: ${obfuscateUid(osui.objectId)}`
+                }))
+            );
+        };
+        getWalletOsuiObjects();
+        console.log('osuiObjects', osuiObjects);
+    }, [wallet]);
 
     return (
         <Formik
@@ -104,67 +135,25 @@ const StakeWidgetForm = ({ ...others }) => {
                 }
             }}
         >
-            {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values, touched }) => (
+            {({ errors, handleSubmit, isSubmitting, touched }) => (
                 <form noValidate onSubmit={handleSubmit} {...others}>
-                    <Typography variant="caption">Balance {convertBalance(balance)} SUI</Typography>
+                    <FormControl fullWidth>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <FormControlSelect
+                                    id="outlined-adornment-email-login"
+                                    currencies={osuiObjects}
+                                    captionLabel="oSui Objects"
+                                    selected="1"
+                                />
+                            </Grid>
+                        </Grid>
 
-                    <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-email-login">SUI</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-email-login"
-                            type="number"
-                            value={values.sui}
-                            name="sui"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            inputProps={{}}
-                            sx={{
-                                '& input[type=number]': {
-                                    MozAppearance: 'textfield'
-                                },
-                                '& input[type=number]::-webkit-outer-spin-button': {
-                                    WebkitAppearance: 'none',
-                                    margin: 0
-                                },
-                                '& input[type=number]::-webkit-inner-spin-button': {
-                                    WebkitAppearance: 'none',
-                                    margin: 0
-                                }
-                            }}
-                        />
                         {touched.sui && errors.sui && (
                             <FormHelperText error id="standard-weight-helper-text-email-login">
                                 {errors.sui}
                             </FormHelperText>
                         )}
-                    </FormControl>
-
-                    <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-password-login">oSUI</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password-login"
-                            type={'number'}
-                            value={values.sui}
-                            name="osui"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            inputProps={{}}
-                            label="oSui"
-                            sx={{
-                                '& input[type=number]': {
-                                    '-moz-appearance': 'textfield'
-                                },
-                                '& input[type=number]::-webkit-outer-spin-button': {
-                                    '-webkit-appearance': 'none',
-                                    margin: 0
-                                },
-                                '& input[type=number]::-webkit-inner-spin-button': {
-                                    '-webkit-appearance': 'none',
-                                    margin: 0
-                                }
-                            }}
-                            disabled
-                        />
                     </FormControl>
 
                     {errors.submit && (
@@ -174,8 +163,8 @@ const StakeWidgetForm = ({ ...others }) => {
                     )}
                     <Box sx={{ mt: 2 }}>
                         <AnimateButton>
-                            <Button color="secondary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
-                                Stake
+                            <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
+                                Unstake
                             </Button>
                         </AnimateButton>
                     </Box>
@@ -185,8 +174,8 @@ const StakeWidgetForm = ({ ...others }) => {
     );
 };
 
-StakeWidgetForm.propTypes = {
+UnstakeWidgetForm.propTypes = {
     loginProp: PropTypes.number
 };
 
-export default StakeWidgetForm;
+export default UnstakeWidgetForm;

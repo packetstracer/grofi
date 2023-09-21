@@ -1,13 +1,15 @@
 import { Fragment } from 'react';
 
-import StakeWidget from './StakeWidget';
 import StakeStatsCard from './StakeStatsCard';
+import StakeWidget from './StakeWidget';
 
-const StakePage = () => (
-    <>
-        <StakeStatsCard />
-        <StakeWidget />
-    </>
-);
+const StakePage = () => {
+    return (
+        <>
+            <StakeStatsCard />
+            <StakeWidget />
+        </>
+    );
+};
 
 export default StakePage;
