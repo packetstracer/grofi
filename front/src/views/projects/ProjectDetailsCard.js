@@ -58,10 +58,9 @@ const WebsiteWrapper = styled(Button)({
     }
 });
 
-const ProjectDetailsCard = ({ id, about, avatar, contact, email, location, name, role }) => {
+const ProjectDetailsCard = ({ about, avatar, contact, email, location, name, role }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
-    console.log('the modal is open ' + open, id, setOpen);
 
     const theme = useTheme();
     const avatarProfile = avatar && avatarImage(`./${avatar}`);
@@ -75,12 +74,10 @@ const ProjectDetailsCard = ({ id, about, avatar, contact, email, location, name,
     };
 
     const handleOpenDialog = () => {
-        console.log('opening dialog');
         setOpen(true);
     };
 
     const handleCloseDialog = () => {
-        console.log('closing dialog');
         setOpen(false);
     };
 

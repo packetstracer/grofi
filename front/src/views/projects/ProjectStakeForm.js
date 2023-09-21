@@ -28,6 +28,8 @@ const ProjectWidgetForm = ({ ...others }) => {
     const wallet = useWallet();
     const { balance } = useAccountBalance();
 
+    console.log(balance, convertMistToSui(Number(balance)));
+
     return (
         <Formik
             initialValues={{
@@ -36,7 +38,10 @@ const ProjectWidgetForm = ({ ...others }) => {
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                sui: Yup.number().positive().min(1, 'Must stake more than 1 SUI').max(convertMistToSui(balance), 'Not enough SUI balance')
+                sui: Yup.number()
+                    .positive()
+                    .min(1, 'Must stake more than 1 SUI')
+                    .max(convertMistToSui(Number(balance)), 'Not enough SUI balance')
             })}
             onReset={(values) => {
                 values.sui = 1;
@@ -90,7 +95,7 @@ const ProjectWidgetForm = ({ ...others }) => {
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values, touched }) => (
                 <form noValidate onSubmit={handleSubmit} {...others}>
-                    <Typography variant="caption">Balance {convertMistToSui(balance)}</Typography>
+                    <Typography variant="caption">Balance {convertMistToSui(Number(balance))}</Typography>
 
                     <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
                         <InputLabel htmlFor="outlined-adornment-email-login">oSUI</InputLabel>
