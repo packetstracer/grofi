@@ -24,6 +24,10 @@ yarn-error.log*
 .vscode
 node_modules
 
+# sui client
 sui.log.*
 
 full-version
+
+# move
+/back/build/**

@@ -1,8 +1,10 @@
 module grofi::nft {
-    use sui::url::{Self, Url};
     use std::string;
-    use sui::object::{Self, UID};
+
+    use sui::url::{Self, Url};
+    use sui::object::{Self, UID, ID};
     use sui::transfer;
+    use sui::event;
     use sui::tx_context::{Self, TxContext};
 
 
@@ -12,6 +14,11 @@ module grofi::nft {
         name: string::String,
         description: string::String, 
         url: Url,
+    }
+
+    struct GenericEvent has copy, drop {
+        id: ID,
+        message: string::String,
     }
 
 
@@ -24,10 +31,20 @@ module grofi::nft {
             url: url::new_unsafe_from_bytes(url),
         };
 
+        event::emit(GenericEvent { 
+            id: object::uid_to_inner(&nft.id), 
+            message: string::utf8(b"grofi::nft::mint : NFT minted") 
+        });
+
         transfer::public_transfer(nft, tx_context::sender(ctx));
     }
 
     public entry fun transfer(nft: ProjectInvestmentNft, recipient: address) {
+        event::emit(GenericEvent { 
+            id: object::uid_to_inner(&nft.id), 
+            message: string::utf8(b"grofi::nft::transfer : NFT transferred to owner") 
+        });
+
         transfer::transfer(nft, recipient);
     }
 }

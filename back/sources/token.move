@@ -1,7 +1,10 @@
 module grofi::token {
     use std::option;
+    use std::string;
+
     use sui::coin::{Self, Coin, TreasuryCap};
     use sui::transfer;
+    use sui::event;
     use sui::tx_context::{Self, TxContext};
 
     
@@ -14,6 +17,10 @@ module grofi::token {
     // }
 
     struct TOKEN has drop {}
+
+    struct GenericEvent has copy, drop {
+        message: string::String,
+    }
 
 
     const TokenName: vector<u8> = b"GroFi";
@@ -29,10 +36,18 @@ module grofi::token {
         // assert!(amount + TokensMinted >= TokenSupply, ETokenSupplyThreshold);
         // TokensMinted = TokensMinted + amount;
 
+        event::emit(GenericEvent { 
+            message: string::utf8(b"grofi::token::mint : GRO tokens minted") 
+        });
+
         coin::mint_and_transfer(treasury_cap, amount, recipient, ctx)
     }
 
     public entry fun burn(treasury_cap: &mut TreasuryCap<TOKEN>, coin: Coin<TOKEN>) {
+        event::emit(GenericEvent { 
+            message: string::utf8(b"grofi::token::burn : GRO tokens burnt") 
+        });
+
         coin::burn(treasury_cap, coin);
     }
     
@@ -51,6 +66,10 @@ module grofi::token {
         );
 
         // TokensMinted = 0;
+
+        event::emit(GenericEvent { 
+            message: string::utf8(b"grofi::token::init : GRO token declared") 
+        });
 
         transfer::public_freeze_object(coin_metadata);
         transfer::public_transfer(treasury_cap, tx_context::sender(ctx))

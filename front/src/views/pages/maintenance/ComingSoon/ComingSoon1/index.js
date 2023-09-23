@@ -303,7 +303,7 @@ const ComingSoon1 = () => {
                                                         <Grid item>
                                                             <ButtonBase
                                                                 component={Link}
-                                                                href="https://links.codedthemes.com/HTIBc"
+                                                                href="https://blockscope.net"
                                                                 target="_blank"
                                                                 aria-label="blog"
                                                             >
@@ -328,7 +328,7 @@ const ComingSoon1 = () => {
                                                         <Grid item>
                                                             <ButtonBase
                                                                 component={Link}
-                                                                href="https://www.facebook.com/codedthemes"
+                                                                href="https://blockscope.net"
                                                                 target="_blank"
                                                                 aria-label="facebook"
                                                             >
@@ -353,7 +353,7 @@ const ComingSoon1 = () => {
                                                         <Grid item>
                                                             <ButtonBase
                                                                 component={Link}
-                                                                href="https://twitter.com/codedthemes"
+                                                                href="https://blockscope.net"
                                                                 target="_blank"
                                                                 aria-label="twitter"
                                                             >
@@ -378,7 +378,7 @@ const ComingSoon1 = () => {
                                                         <Grid item>
                                                             <ButtonBase
                                                                 component={Link}
-                                                                href="https://github.com/codedthemes"
+                                                                href="https://blockscope.net"
                                                                 target="_blank"
                                                                 aria-label="github"
                                                             >
@@ -403,7 +403,7 @@ const ComingSoon1 = () => {
                                                         <Grid item>
                                                             <ButtonBase
                                                                 component={Link}
-                                                                href="https://dribbble.com/codedthemes"
+                                                                href="https://blockscope.net"
                                                                 target="_blank"
                                                                 aria-label="dribble"
                                                             >
