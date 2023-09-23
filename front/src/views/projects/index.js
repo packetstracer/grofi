@@ -10,9 +10,9 @@ const usersDetails = [
     {
         id: '#1grofi',
         avatar: 'suins_400x400.png',
-        name: 'Grofi',
+        name: 'GroFi',
         role: 'Liquid Staking for Circular Economy on Sui Network',
-        about: 'Grofi is an LSD dApp developed by Blockscope, a Web3 software studio that aims to deliver top notch DeFi and LSDfi applications.',
+        about: 'GroFi is an LSD dApp developed by Blockscope, a Web3 software studio that aims to deliver top notch DeFi and LSDfi applications.',
         email: 'https://grofi.xyz',
         contact: 'Exclusive NFTs',
         location: 'LSDfi'
