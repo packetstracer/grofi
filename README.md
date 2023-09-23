@@ -1,3 +1,4 @@
-GroFi - LSD for Financial Ecosystem Growth
+GroFi - Sui LSD for Financial Ecosystem Growth
 
-WIP - deploying code soon... 
+
+![GroFi banner]([https://grofi.nearscope.net/grofi-](https://grofi.nearscope.net/grofi-banner-1920x1080.png)https://grofi.nearscope.net/grofi-banner-1920x1080.png)
