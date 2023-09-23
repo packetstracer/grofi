@@ -11,14 +11,14 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 import { useWallet, useAccountBalance } from '@suiet/wallet-kit';
+import { convertMistToSui } from 'utils/sui/lib';
+import { getBiggestGasObject, getObjectsCreatedFromTxResult, stakeSui, wrapStakedSui } from 'utils/sui/lib';
+import { MIST_PER_SUI } from 'utils/sui/constant';
 
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import useScriptRef from 'hooks/useScriptRef';
 
-import { setStake, convertBalance } from 'store/slices/stake';
-
-import { getBiggestGasObject, getObjectsCreatedFromTxResult, stakeSui, stakeOsui } from 'utils/sui/lib';
-import { MIST_PER_SUI } from '@mysten/sui.js/utils';
+import { addStake } from 'store/slices/stake';
 
 const displaySnackbar = (msg, level) => {
     enqueueSnackbar(msg, {
@@ -48,7 +48,10 @@ const StakeWidgetForm = ({ ...others }) => {
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                sui: Yup.number().positive().min(1, 'Must stake more than 1 SUI').max(convertBalance(balance), 'Not enough SUI balance')
+                sui: Yup.number()
+                    .positive()
+                    .min(1, 'Must stake more than 1 SUI')
+                    .max(convertMistToSui(Number(balance)), 'Not enough SUI balance')
             })}
             onReset={(values) => {
                 values.sui = 1;
@@ -70,21 +73,23 @@ const StakeWidgetForm = ({ ...others }) => {
 
                     if (!gasObject || !gasObject.objectId) {
                         displaySnackbar('SUI gas object not found!', 'error');
+                        return;
                     } else if (gasObject.content?.fields?.balance < values.sui + 1) {
                         displaySnackbar(`Need more than ${values.sui + 1} SUI to do the tx!`, 'error');
+                        return;
                     }
 
-                    let result = await stakeSui(wallet, BigInt(values.sui) * MIST_PER_SUI);
+                    let result = await stakeSui(wallet, values.sui * MIST_PER_SUI);
                     const objectsCreated = getObjectsCreatedFromTxResult(result);
-                    result = await stakeOsui(wallet, objectsCreated[0].objectId);
+                    result = await wrapStakedSui(wallet, objectsCreated[0].objectId);
 
                     displaySnackbar(`${values.sui} SUI staked successfully and received ${values.sui} oSUI`, 'info');
 
                     dispatch(
-                        setStake({
-                            staked: values.sui,
-                            minted: values.sui,
-                            rewards: rewards + 124
+                        addStake({
+                            staked: values.sui * MIST_PER_SUI,
+                            minted: values.sui * MIST_PER_SUI,
+                            rewards: rewards * MIST_PER_SUI + values.sui * MIST_PER_SUI * 0.1
                         })
                     );
 
@@ -106,7 +111,7 @@ const StakeWidgetForm = ({ ...others }) => {
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, values, touched }) => (
                 <form noValidate onSubmit={handleSubmit} {...others}>
-                    <Typography variant="caption">Balance {convertBalance(balance)} SUI</Typography>
+                    <Typography variant="caption">Balance {convertMistToSui(Number(balance))} SUI</Typography>
 
                     <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
                         <InputLabel htmlFor="outlined-adornment-email-login">SUI</InputLabel>

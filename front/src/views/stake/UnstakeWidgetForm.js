@@ -10,26 +10,21 @@ import { enqueueSnackbar } from 'notistack';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { useWallet, useAccountBalance } from '@suiet/wallet-kit';
+import { useWallet } from '@suiet/wallet-kit';
 
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import useScriptRef from 'hooks/useScriptRef';
 
-import { setStake, convertBalance } from 'store/slices/stake';
+import { getEpoch, setStake } from 'store/slices/stake';
 
-import {
-    getBiggestGasObject,
-    getObjectsCreatedFromTxResult,
-    getOsuiObjects,
-    stakeSui,
-    stakeOsui,
-    convertMistToSui,
-    obfuscateUid
-} from 'utils/sui/lib';
-import { MIST_PER_SUI } from '@mysten/sui.js/utils';
+import { getBiggestGasObject, getOsuiObjects, unstakeSui, unwrapStakedSui, convertMistToSui, obfuscateUid } from 'utils/sui/lib';
 
-const orderByBalance = (a, b) =>
-    a.content?.fields?.balance < b.content?.fields?.balance ? 1 : b.content?.fields?.balance < a.content?.fields?.balance ? -1 : 0;
+const orderByBalance = (a, b) => {
+    const aBalance = Number(a.content?.fields?.balance);
+    const bBalance = Number(b.content?.fields?.balance);
+
+    return aBalance < bBalance ? 1 : bBalance < aBalance ? -1 : 0;
+};
 
 const displaySnackbar = (msg, level) => {
     enqueueSnackbar(msg, {
@@ -43,13 +38,24 @@ const displaySnackbar = (msg, level) => {
 
 const UnstakeWidgetForm = ({ ...others }) => {
     const dispatch = useDispatch();
-    const { rewards } = useSelector((state) => state.stake);
+
+    const epoch = useSelector((state) => state?.stake?.epoch);
+
     const [osuiObjects, setOsuiObjects] = useState([]);
+    const [selectedOsui, setSelectedOsui] = useState(0);
+    const [submitted, setSubmitted] = useState(false);
 
     const scriptedRef = useScriptRef();
 
     const wallet = useWallet();
-    const { balance } = useAccountBalance();
+
+    const handleOsuiSelectChange = (event) => {
+        setSelectedOsui(osuiObjects[event.target.value]);
+    };
+
+    useEffect(() => {
+        dispatch(getEpoch());
+    }, []);
 
     useEffect(() => {
         if (!wallet.address || !wallet.address === '') {
@@ -58,32 +64,35 @@ const UnstakeWidgetForm = ({ ...others }) => {
 
         const getWalletOsuiObjects = async () => {
             const osuiObjects = await getOsuiObjects(wallet);
-            console.log('osuiObjects ordered', osuiObjects.sort(orderByBalance));
-            console.log('osuiObjects', orderByBalance);
+
             setOsuiObjects(
                 osuiObjects.sort(orderByBalance).map((osui, i) => ({
+                    ...osui,
                     value: i,
                     label: `${convertMistToSui(osui.content?.fields?.balance)} SUI - Id: ${obfuscateUid(osui.objectId)}`
                 }))
             );
+
+            setSelectedOsui(osuiObjects[0]);
         };
+
         getWalletOsuiObjects();
-        console.log('osuiObjects', osuiObjects);
-    }, [wallet]);
+    }, [wallet, submitted]);
 
     return (
         <Formik
             initialValues={{
-                sui: 1,
-                osui: 1,
+                selected: 0,
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                sui: Yup.number().positive().min(1, 'Must stake more than 1 SUI').max(convertBalance(balance), 'Not enough SUI balance')
+                selected: Yup.number()
+                    .positive()
+                    .min(0, 'Option must be selected')
+                    .max(osuiObjects.length, 'Option from the select list required')
             })}
             onReset={(values) => {
-                values.sui = 1;
-                values.osui = 1;
+                values.selected = 0;
             }}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
                 try {
@@ -97,25 +106,39 @@ const UnstakeWidgetForm = ({ ...others }) => {
                         return;
                     }
 
+                    const stakeActivationEpoch = Number(selectedOsui.content.fields.staked_sui.fields.stake_activation_epoch ?? 0);
+
+                    if (stakeActivationEpoch > 0 && stakeActivationEpoch > Number(epoch.epoch)) {
+                        displaySnackbar(
+                            `oSui cannot be unstaked until activation epoch (current epoch ${epoch.epoch} - activation epoch ${stakeActivationEpoch})`,
+                            'error'
+                        );
+                        return;
+                    }
+
                     const gasObject = await getBiggestGasObject(wallet);
 
                     if (!gasObject || !gasObject.objectId) {
                         displaySnackbar('SUI gas object not found!', 'error');
+                        return;
                     } else if (gasObject.content?.fields?.balance < values.sui + 1) {
                         displaySnackbar(`Need more than ${values.sui + 1} SUI to do the tx!`, 'error');
+                        return;
                     }
 
-                    let result = await stakeSui(wallet, BigInt(values.sui) * MIST_PER_SUI);
-                    const objectsCreated = getObjectsCreatedFromTxResult(result);
-                    result = await stakeOsui(wallet, objectsCreated[0].objectId);
+                    let result = await unwrapStakedSui(wallet, selectedOsui.objectId);
+                    console.log('unwrap result', result);
+                    result = await unstakeSui(wallet, selectedOsui.content.fields.staked_sui.fields.id.id);
+                    console.log('unstake result', result);
 
-                    displaySnackbar(`${values.sui} SUI staked successfully and received ${values.sui} oSUI`, 'info');
+                    setSubmitted(submitted + 1);
+
+                    displaySnackbar(`${selectedOsui} oSUI unwrapped successfully`, 'info');
 
                     dispatch(
                         setStake({
                             staked: values.sui,
-                            minted: values.sui,
-                            rewards: rewards + 124
+                            minted: values.sui
                         })
                     );
 
@@ -125,7 +148,7 @@ const UnstakeWidgetForm = ({ ...others }) => {
                         resetForm();
                     }
                 } catch (err) {
-                    displaySnackbar('An error ocurred, could not stake SUI', 'error');
+                    displaySnackbar('An error ocurred, could not unwrap SUI', 'error');
 
                     if (scriptedRef.current) {
                         setStatus({ success: false });
@@ -144,7 +167,8 @@ const UnstakeWidgetForm = ({ ...others }) => {
                                     id="outlined-adornment-email-login"
                                     currencies={osuiObjects}
                                     captionLabel="oSui Objects"
-                                    selected="1"
+                                    selected="0"
+                                    onChange={handleOsuiSelectChange}
                                 />
                             </Grid>
                         </Grid>

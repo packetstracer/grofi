@@ -1,4 +1,9 @@
 export const SUI_ENV = 'testnet';
+
+export const SUI_RPC_URL = `https://rpc.${SUI_ENV}.sui.io`;
+
+export const MIST_PER_SUI = 1_000_000_000;
+
 export const SUI_PACKAGE_ADDRESS = '0x3';
 export const GROFI_PACKAGE_ADDRESS = '0xc919b351960be34dc5c1ff3e5a53addca7b6bfb8a191b6a0ddb542511682f75b';
 

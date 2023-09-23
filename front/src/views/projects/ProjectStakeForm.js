@@ -17,6 +17,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import useScriptRef from 'hooks/useScriptRef';
 
 import { setStake } from 'store/slices/stake';
+import { MIST_PER_SUI } from '@mysten/sui.js/utils';
 
 const ProjectWidgetForm = ({ ...others }) => {
     const theme = useTheme();
@@ -27,8 +28,6 @@ const ProjectWidgetForm = ({ ...others }) => {
 
     const wallet = useWallet();
     const { balance } = useAccountBalance();
-
-    console.log(balance, convertMistToSui(Number(balance)));
 
     return (
         <Formik
@@ -63,9 +62,9 @@ const ProjectWidgetForm = ({ ...others }) => {
 
                     dispatch(
                         setStake({
-                            staked: values.sui,
-                            minted: values.sui,
-                            rewards: rewards + 124
+                            staked: values.sui * MIST_PER_SUI,
+                            minted: values.sui * MIST_PER_SUI,
+                            rewards: rewards * MIST_PER_SUI + 124 * MIST_PER_SUI
                         })
                     );
 

@@ -82,7 +82,7 @@ const BorderLinearProgress = styled(LinearProgress)(() => ({
     }
 }));
 
-const convertBalance = (balance) => {
+const roundBalance = (balance) => {
     return Math.round(balance);
 };
 
@@ -211,7 +211,7 @@ export default function AlertDialogSlide({ open, handleClose, title, description
                                 <Grid container spacing={2} alignItems="center" justifyContent="center" sx={{ pt: 2 }}>
                                     <Grid item xs>
                                         <Typography variant="caption">
-                                            Investment Goal: {convertBalance((1000000 * progress) / 100)} / 1.000.000
+                                            Investment Goal: {roundBalance((1000000 * progress) / 100)} / 1.000.000
                                         </Typography>
                                     </Grid>
                                 </Grid>

@@ -29,12 +29,9 @@ const StakeWidget = () => {
         }
 
         const getWalletObjects = async () => {
-            const suiClient = new SuiClient({ url: getFullnodeUrl(SUI_ENV) });
-
             dispatch(resetStake());
 
-            console.log('getWalletObjects : wallet address', wallet.address);
-
+            const suiClient = new SuiClient({ url: getFullnodeUrl(SUI_ENV) });
             suiClient
                 .getOwnedObjects({
                     owner: wallet.address

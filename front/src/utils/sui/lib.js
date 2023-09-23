@@ -1,13 +1,16 @@
 import { isEmpty } from 'lodash';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-// import { MIST_PER_SUI } from '@mysten/sui.js/utils';
 
 import { CLIENT_DEFAULT_OPTIONS, SUI_ENV, SUI_PACKAGE_ADDRESS, GROFI_PACKAGE_ADDRESS, VALIDATOR_ADDRESS_DEFAULT } from './constant';
 
 export const convertMistToSui = (balance) => {
     const balanceInSui = balance / 1_000_000_000;
     return Math.round(balanceInSui * 100) / 100;
+};
+
+export const convertSuiToMist = (balance) => {
+    return balance * 1_000_000_000;
 };
 
 export const obfuscateUid = (uid) => {
@@ -87,12 +90,34 @@ export const stakeSui = async (wallet, amount) => {
     return await wallet.signAndExecuteTransactionBlock({ transactionBlock: tx });
 };
 
-export const stakeOsui = async (wallet, stakedSuiObjectId) => {
+export const unstakeSui = async (wallet, stakedSuiId) => {
+    const tx = new TransactionBlock();
+
+    tx.moveCall({
+        target: `${SUI_PACKAGE_ADDRESS}::sui_system::request_withdraw_stake`,
+        arguments: [tx.pure('0x5'), tx.object(stakedSuiId)]
+    });
+
+    return await wallet.signAndExecuteTransactionBlock({ transactionBlock: tx });
+};
+
+export const wrapStakedSui = async (wallet, stakedSuiId) => {
     const tx = new TransactionBlock();
 
     tx.moveCall({
         target: `${GROFI_PACKAGE_ADDRESS}::stake::create_wrapped_staked_sui`,
-        arguments: [tx.object(stakedSuiObjectId)]
+        arguments: [tx.object(stakedSuiId)]
+    });
+
+    return await wallet.signAndExecuteTransactionBlock({ transactionBlock: tx });
+};
+
+export const unwrapStakedSui = async (wallet, wrappedStakedSuiId) => {
+    const tx = new TransactionBlock();
+
+    tx.moveCall({
+        target: `${GROFI_PACKAGE_ADDRESS}::stake::destroy_wrapped_staked_sui`,
+        arguments: [tx.object(wrappedStakedSuiId)]
     });
 
     return await wallet.signAndExecuteTransactionBlock({ transactionBlock: tx });

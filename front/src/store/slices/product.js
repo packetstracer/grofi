@@ -103,10 +103,9 @@ export function getProduct(id) {
     };
 }
 
-export function getRelatedProducts(id) {
+export function getRelatedProducts() {
     return async () => {
         try {
-            console.log(id);
             dispatch(slice.actions.getRelatedProductsSuccess(products));
         } catch (error) {
             dispatch(slice.actions.hasError(error));

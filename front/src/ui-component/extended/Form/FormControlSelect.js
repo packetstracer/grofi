@@ -1,13 +1,20 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, FormControl, InputAdornment, MenuItem, TextField } from '@mui/material';
 
-// ==============================|| FORM CONTROL SELECT ||============================== //
-
-const FormControlSelect = ({ captionLabel, currencies, formState, iconPrimary, iconSecondary, selected, textPrimary, textSecondary }) => {
+const FormControlSelect = ({
+    captionLabel,
+    currencies,
+    formState,
+    iconPrimary,
+    iconSecondary,
+    selected,
+    textPrimary,
+    textSecondary,
+    onChange
+}) => {
     const theme = useTheme();
     const IconPrimary = iconPrimary;
     const primaryIcon = iconPrimary ? <IconPrimary fontSize="small" sx={{ color: theme.palette.grey[700] }} /> : null;
@@ -19,7 +26,11 @@ const FormControlSelect = ({ captionLabel, currencies, formState, iconPrimary, i
     const val = selected || '';
 
     const [currency, setCurrency] = useState(val);
-    const handleChange = (event) => setCurrency(event?.target.value);
+
+    const handleChange = (event) => {
+        setCurrency(event?.target.value);
+        onChange && onChange(event);
+    };
 
     return (
         <FormControl fullWidth error={errorState}>
@@ -55,11 +66,12 @@ const FormControlSelect = ({ captionLabel, currencies, formState, iconPrimary, i
                     )
                 }}
             >
-                {currencies?.map((option, index) => (
-                    <MenuItem key={index} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
+                {currencies.length > 0 &&
+                    currencies?.map((option, index) => (
+                        <MenuItem key={index} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
             </TextField>
         </FormControl>
     );
@@ -73,7 +85,8 @@ FormControlSelect.propTypes = {
     iconSecondary: PropTypes.object,
     selected: PropTypes.string,
     textPrimary: PropTypes.string,
-    textSecondary: PropTypes.string
+    textSecondary: PropTypes.string,
+    onChange: PropTypes.func
 };
 
 export default FormControlSelect;

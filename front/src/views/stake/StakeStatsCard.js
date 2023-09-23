@@ -13,7 +13,7 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import InvertColorsIcon from '@mui/icons-material/InvertColors';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-import { convertBalance } from 'store/slices/stake';
+import { convertMistToSui } from 'utils/sui/lib';
 
 const StakeStatsCard = () => {
     const theme = useTheme();
@@ -25,7 +25,7 @@ const StakeStatsCard = () => {
                 <Grid item xs={12} lg={4} sm={8}>
                     <UserCountCard
                         primary="Staked SUI"
-                        secondary={convertBalance(stake.staked)}
+                        secondary={convertMistToSui(stake.staked)}
                         iconPrimary={WaterDropIcon}
                         color={theme.palette.primary.dark}
                     />
@@ -33,7 +33,7 @@ const StakeStatsCard = () => {
                 <Grid item xs={12} lg={4} sm={8}>
                     <UserCountCard
                         primary="Available oSUI"
-                        secondary={convertBalance(stake.minted)}
+                        secondary={convertMistToSui(stake.minted)}
                         iconPrimary={InvertColorsIcon}
                         color={theme.palette.secondary.main}
                     />
@@ -41,7 +41,7 @@ const StakeStatsCard = () => {
                 <Grid item xs={12} lg={4} sm={8}>
                     <UserCountCard
                         primary="Rewards GFI"
-                        secondary={convertBalance(stake.rewards)}
+                        secondary={convertMistToSui(stake.rewards)}
                         iconPrimary={ShoppingCartIcon}
                         color={theme.palette.success.dark}
                     />
